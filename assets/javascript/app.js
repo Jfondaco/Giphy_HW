@@ -13,12 +13,15 @@ $("#submit-button").on("click", function(){
     console.log(topics);
 });
 
+
 //on click for buttons
 //my problem is in this function
-$("button").on("click", function(){
+$(document).on("click", "button", function(){
+    console.log("test")
     event.preventDefault();
     var tag = $(this).attr("data-animal"); //what does "this" return here, I know its a button but whats its "value"?? Should I use data-animal??
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q="+tag+"&api_key="+myApiKey;
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q="+tag+"&api_key="+myApiKey+"&random?";
+    console.log(queryURL);
 
     //get GIF results from API
     $.ajax({
@@ -28,7 +31,7 @@ $("button").on("click", function(){
         var results = response.data
         console.log(results);
 
-        for (var i = 0; i < 11; i++){
+        for (var i = 0; i < 10; i++){
             var animalDiv = $("<div>");
             var animalImg = $("<img>");
             var animalP = $("<p>")
@@ -38,6 +41,7 @@ $("button").on("click", function(){
 			animalImg.attr("data-stop", results[i].images.original_still.url);
     		animalImg.attr("data-play", results[i].images.original.url);
             animalImg.attr("data-current", "still");
+            animalImg.attr("class", "gif")
                 
             animalDiv.append(animalP);
             animalDiv.append(animalImg);
@@ -64,12 +68,14 @@ function startStop(){
     var still = $(this).attr("data-stop");
 
     if (current == "still") {
-        $(this).attr("src", PlayingGif);
+        $(this).attr("src", animate);
         $(this).attr("data-current", "animate");
     }
 
     else {
-        $(this).attr("src", StoppedGif);
+        $(this).attr("src", still);
         $(this).attr("data-current", "still");
     }
 }
+
+$(document).on("click", ".gif", startStop);
